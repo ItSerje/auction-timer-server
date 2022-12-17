@@ -1,36 +1,6 @@
 import { WebSocketServer, WebSocket } from 'ws';
 import defaultAuctionState from './defaultAuctionState.json';
-
-interface IWsExtended extends WebSocket {
-  uid?: string;
-}
-
-interface IWssExtended extends WebSocketServer {
-  usersOnline?: Set<string>;
-  timer?: NodeJS.Timeout;
-}
-
-interface IParameters {
-  [key: string]: string;
-}
-
-interface IAuctionState {
-  parameters: IParameters;
-  participants: {
-    id: string;
-    name: string;
-    currentOffer: {
-      [key: keyof IParameters]:
-        | string
-        | {
-            [key: string]: string;
-          };
-    };
-  }[];
-  activeParticipantId: string;
-  startTime: number | null;
-  waitTime: number;
-}
+import { IAuctionState, IWsExtended, IWssExtended } from './types';
 
 const auctionState: IAuctionState = defaultAuctionState;
 
