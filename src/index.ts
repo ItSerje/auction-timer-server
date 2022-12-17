@@ -3,7 +3,6 @@ import defaultAuctionState from './defaultAuctionState.json';
 
 interface IWsExtended extends WebSocket {
   uid?: string;
-  isAlive?: boolean;
 }
 
 interface IWssExtended extends WebSocketServer {
@@ -34,10 +33,6 @@ interface IAuctionState {
 }
 
 const auctionState: IAuctionState = defaultAuctionState;
-
-function heartbeat(this: IWsExtended) {
-  this.isAlive = true;
-}
 
 const wss: IWssExtended = new WebSocketServer({
   port: 8081,
@@ -95,8 +90,6 @@ wss.on('connection', function connection(ws: IWsExtended, request: any) {
   }
   ws.send(JSON.stringify(auctionState));
 
-  ws.isAlive = true;
-  ws.on('pong', heartbeat);
   ws.on('close', () => {
     if (ws.uid) {
       wss.usersOnline?.delete(ws.uid);
@@ -113,18 +106,4 @@ wss.on('connection', function connection(ws: IWsExtended, request: any) {
       clearInterval(wss.timer);
     }
   });
-});
-
-const interval = setInterval(function ping() {
-  wss.clients.forEach(function each(ws: IWsExtended) {
-    if (ws.isAlive === false) return ws.terminate();
-
-    ws.isAlive = false;
-    ws.ping();
-  });
-}, 30000);
-
-wss.on('close', function close() {
-  console.log('closed');
-  clearInterval(interval);
 });
