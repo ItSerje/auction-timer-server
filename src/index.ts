@@ -1,4 +1,5 @@
 import { WebSocketServer, WebSocket } from 'ws';
+import defaultAuctionState from './defaultAuctionState.json';
 
 interface IWsExtended extends WebSocket {
   isAlive?: boolean;
@@ -8,19 +9,29 @@ interface IWssExtended extends WebSocketServer {
   timer?: NodeJS.Timeout;
 }
 
-interface IAuctionState {
-  participants: string[];
-  activeParticipant: string;
-  startTime: number | null;
-  delay: number;
+interface IParameters {
+  [key: string]: string;
 }
 
-const auctionState: IAuctionState = {
-  participants: ['1', '2', '3', '4'],
-  activeParticipant: '1',
-  startTime: null,
-  delay: 5000
-};
+interface IAuctionState {
+  parameters: IParameters;
+  participants: {
+    id: string;
+    name: string;
+    currentOffer: {
+      [key: keyof IParameters]:
+        | string
+        | {
+            [key: string]: string;
+          };
+    };
+  }[];
+  activeParticipantId: string;
+  startTime: number | null;
+  waitTime: number;
+}
+
+const auctionState: IAuctionState = defaultAuctionState;
 
 function heartbeat(this: IWsExtended) {
   this.isAlive = true;
@@ -33,11 +44,14 @@ const wss: IWssExtended = new WebSocketServer({
 
 function setAuctionState() {
   auctionState.startTime = Date.now();
-  const current = auctionState.participants.indexOf(
-    auctionState.activeParticipant
+
+  const current = auctionState.participants.findIndex(
+    (el) => el.id === auctionState.activeParticipantId
   );
-  auctionState.activeParticipant =
-    auctionState.participants[current + 1] || auctionState.participants[0];
+
+  auctionState.activeParticipantId =
+    auctionState.participants[current + 1]?.id ||
+    auctionState.participants[0].id;
 
   console.log(auctionState);
 
@@ -52,7 +66,7 @@ wss.on('connection', function connection(ws: IWsExtended) {
   console.log('new connection', 'total clients: ', wss.clients.size);
   if (wss.clients.size === 1) {
     setAuctionState();
-    wss.timer = setInterval(setAuctionState, auctionState.delay);
+    wss.timer = setInterval(setAuctionState, auctionState.waitTime);
   }
   ws.send(JSON.stringify(auctionState));
 
@@ -78,4 +92,3 @@ wss.on('close', function close() {
   console.log('closed');
   clearInterval(interval);
 });
-
