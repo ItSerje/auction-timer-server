@@ -1,7 +1,7 @@
 {
   "activeParticipantId": "1",
   "startTime": null,
-  "waitTime": 5000,
+  "waitTime": 15000,
   "parameters": {
     "param1": "Наличие комплекса мероприятий, повышающих стандарты качества изготовления",
     "param2": "Срок изготовления лота, дней",
