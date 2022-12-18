@@ -23,6 +23,7 @@ wss.sendToAll = (obj: {}) => {
 
 wss.runInterval = (cb: () => void, totalMinutes: number) => {
   if (!wss.isTimerActive) {
+    console.log('timer started at: ', new Date());
     wss.interval = setInterval(() => {
       if (wss.runInterval) wss.runInterval(cb, totalMinutes);
     }, auctionState.waitTime);
@@ -30,8 +31,10 @@ wss.runInterval = (cb: () => void, totalMinutes: number) => {
     setTimeout(() => {
       clearTimeout(wss.interval);
       wss.isTimerActive = false;
+      console.log('timer stopped at: ', new Date());
     }, totalMinutes * 60 * 1000);
   }
+  console.log('cb called at: ', new Date());
   cb();
 };
 
