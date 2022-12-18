@@ -47,9 +47,7 @@ const updateAuctionState = () => {
 
 wss.on('connection', function connection(ws: IWsExtended, request: any) {
   console.log('new connection', 'total clients: ', wss.clients.size);
-  console.log('url, full: ', request);
-  console.log('url: ', request.url.slice(2));
-  // if url contains uid, add to usersOnline and inform all clients
+
   if (request.url !== '/null') {
     ws.uid = request.url.slice(2);
   }
@@ -62,8 +60,10 @@ wss.on('connection', function connection(ws: IWsExtended, request: any) {
   ) {
     wss.usersOnline?.add(ws.uid);
 
-    if (wss.sendToAll && wss.usersOnline)
+    if (wss.sendToAll && wss.usersOnline) {
       wss.sendToAll({ usersOnline: Array.from(wss.usersOnline) });
+      console.log('authenticated users: ', wss.usersOnline);
+    }
   }
 
   if (!wss.isTimerActive) {
