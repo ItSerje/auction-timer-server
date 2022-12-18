@@ -6,7 +6,10 @@ export interface IWsExtended extends WebSocket {
 
 export interface IWssExtended extends WebSocketServer {
   usersOnline?: Set<string>;
-  timer?: NodeJS.Timeout;
+  isTimerActive?: boolean;
+  interval?: NodeJS.Timer;
+  sendToAll?: (obj: {}) => void;
+  runInterval?: (cb: () => void, totalMinutes: number) => void;
 }
 
 interface IParameters {
