@@ -1,6 +1,7 @@
 import { WebSocketServer, WebSocket } from 'ws';
 import defaultAuctionState from './defaultAuctionState.json';
 import { IAuctionState, IWsExtended, IWssExtended } from './types';
+import { STOP_TIMER_AFTER } from './constants';
 
 const auctionState: IAuctionState = defaultAuctionState;
 
@@ -71,7 +72,7 @@ wss.on('connection', function connection(ws: IWsExtended, request: any) {
       wss.runInterval(() => {
         updateAuctionState();
         if (wss.sendToAll) wss.sendToAll({ auctionState });
-      }, 30);
+      }, STOP_TIMER_AFTER);
     wss.isTimerActive = true;
   }
 
