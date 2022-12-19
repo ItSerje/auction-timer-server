@@ -1,12 +1,12 @@
 import { WebSocketServer, WebSocket } from 'ws';
 import defaultAuctionState from './defaultAuctionState.json';
 import { IAuctionState, IWsExtended, IWssExtended } from './types';
-import { STOP_TIMER_AFTER } from './constants';
+import { STOP_TIMER_AFTER, PORT } from './constants';
 
 const auctionState: IAuctionState = defaultAuctionState;
 
 const wss: IWssExtended = new WebSocketServer({
-  port: 8081,
+  port: Number(process.env.PORT) || PORT,
   clientTracking: true
 });
 
