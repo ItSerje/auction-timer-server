@@ -1,1 +1,1 @@
-export const STOP_TIMER_AFTER = 30; // in minutes
+export const STOP_TIMER_AFTER = 60; // in minutes

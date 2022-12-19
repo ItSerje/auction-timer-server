@@ -1,7 +1,7 @@
 {
   "activeParticipantId": "1",
   "startTime": null,
-  "waitTime": 15000,
+  "waitTime": 120000,
   "parameters": {
     "param1": "Наличие комплекса мероприятий, повышающих стандарты качества изготовления",
     "param2": "Срок изготовления лота, дней",
@@ -14,7 +14,7 @@
       "id": "1",
       "name": "John",
       "currentOffer": {
-        "param1": "",
+        "param1": "-",
         "param2": "80",
         "param3": "24",
         "param4": "30%",
@@ -29,7 +29,7 @@
       "id": "2",
       "name": "Mike",
       "currentOffer": {
-        "param1": "",
+        "param1": "-",
         "param2": "90",
         "param3": "24",
         "param4": "100%",
@@ -44,7 +44,7 @@
       "id": "3",
       "name": "Mary",
       "currentOffer": {
-        "param1": "",
+        "param1": "-",
         "param2": "75",
         "param3": "22",
         "param4": "60%",
@@ -59,7 +59,7 @@
       "id": "4",
       "name": "Anna",
       "currentOffer": {
-        "param1": "",
+        "param1": "-",
         "param2": "120",
         "param3": "36",
         "param4": "50%",
